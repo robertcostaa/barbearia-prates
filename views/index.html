@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barbearia Prates</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <h1>💈 Barbearia Prates</h1>
+
+    <section id="cliente">
+      <h2>Agendar horário</h2>
+      <input type="text" id="nome" placeholder="Seu nome" />
+      <input type="date" id="data" />
+      <input type="time" id="hora" />
+      <input type="text" id="servico" placeholder="Serviço" />
+      <button id="btnAgendar">Agendar</button>
+      <p id="resposta"></p>
+    </section>
+
+    <section id="barbeiro">
+      <h2>Agendamentos</h2>
+      <button id="btnListar">Listar agendamentos</button>
+      <ul id="lista"></ul>
+    </section>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>
