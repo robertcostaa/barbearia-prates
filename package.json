@@ -1,0 +1,28 @@
+{
+  "name": "barber",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "dotenv -e .env -- node src/server.js",
+    "dev": "dotenv -e .env -- nodemon src/server.js",
+    "prisma": "dotenv -e .env -- prisma"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.18.0"
+  }
+}
