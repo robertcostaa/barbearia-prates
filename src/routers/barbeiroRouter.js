@@ -7,13 +7,18 @@ import {
   concluirAgendamento 
 } from "../controllers/barbeiroController.js";
 
+import {
+  listarAgendamentos
+} from "../controllers/agendamentoController.js"
+
 const router = express.Router();
 
-// Rotas do barbeiro/admin
+// Rotas do barbeiro
 router.post("/login", loginBarbeiro);
+router.get("/", listarAgendamentos);
 router.get("/agendamentos/dia", listarAgendamentosDia);
 router.get("/agendamentos/mes", listarAgendamentosMes);
-router.patch("/agendamentos/cancelar/:id", cancelarAgendamento);
-router.patch("/agendamentos/concluir/:id", concluirAgendamento);
+router.patch("/cancelar/:id", cancelarAgendamento);
+router.patch("/concluir/:id", concluirAgendamento);
 
 export default router;
