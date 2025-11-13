@@ -1,85 +1,79 @@
-import prisma from "../prisma.js";
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const jwt = require('jsonwebtoken');
 
-// Login do barbeiro
-export const loginBarbeiro = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ erro: "Campos obrigatórios" });
-
+// --- FUNÇÃO DE LOGIN ---
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+  }
   try {
-    const barbeiro = await prisma.barbeiro.findUnique({ where: { username } });
-    if (!barbeiro || barbeiro.password !== password) {
-      return res.status(401).json({ erro: "Usuário ou senha inválidos" });
+    const barbeiro = await prisma.barbeiro.findUnique({ where: { email } });
+    if (!barbeiro || barbeiro.senha !== password) {
+      return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
-    res.json({ mensagem: "Login realizado com sucesso", barbeiro });
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao realizar login" });
+    const token = jwt.sign({ id: barbeiro.id, nome: barbeiro.nome }, 'seu_segredo_super_secreto', { expiresIn: '8h' });
+    res.status(200).json({ message: 'Login bem-sucedido!', token: token, nome: barbeiro.nome });
+  } catch (error) {
+    console.error('Erro no login:', error);
+    res.status(500).json({ error: 'Erro interno no servidor.' });
   }
 };
 
-// Listar agendamentos do dia
-export const listarAgendamentosDia = async (req, res) => {
+// --- FUNÇÃO PARA BUSCAR TODOS OS AGENDAMENTOS ---
+const getAllAgendamentos = async (req, res) => {
+  try {
+    const agendamentos = await prisma.agendamento.findMany({
+      orderBy: { data: 'asc' }
+    });
+    res.status(200).json(agendamentos);
+  } catch (error) {
+    console.error('Erro ao buscar todos os agendamentos:', error);
+    res.status(500).json({ error: 'Erro interno ao buscar agendamentos.' });
+  }
+};
+
+// --- FUNÇÃO PARA BUSCAR AGENDAMENTOS DO DIA ---
+const getAgendamentosDia = async (req, res) => {
   try {
     const hoje = new Date();
-    const inicioDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-    const fimDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() + 1);
+    hoje.setHours(0, 0, 0, 0);
+    const amanha = new Date(hoje);
+    amanha.setDate(hoje.getDate() + 1);
 
     const agendamentos = await prisma.agendamento.findMany({
-      where: { data: { gte: inicioDia, lt: fimDia } },
-      orderBy: { hora: "asc" }
+      where: { data: { gte: hoje, lt: amanha } },
+      orderBy: { data: 'asc' }
     });
-
-    res.json(agendamentos);
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao listar agendamentos do dia" });
+    res.status(200).json(agendamentos);
+  } catch (error) {
+    console.error('Erro ao buscar agendamentos do dia:', error);
+    res.status(500).json({ error: 'Erro interno ao buscar agendamentos.' });
   }
 };
 
-// Listar agendamentos do mês
-export const listarAgendamentosMes = async (req, res) => {
+
+const updateAgendamentoStatus = async (req, res) => {
+  const { id } = req.params; // Pega o ID do agendamento da URL
+  const { status } = req.body; // Pega o novo status ('concluido' ou 'cancelado') do corpo da requisição
+
   try {
-    const hoje = new Date();
-    const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 1);
-
-    const agendamentos = await prisma.agendamento.findMany({
-      where: { data: { gte: inicioMes, lt: fimMes } },
-      orderBy: [{ data: "asc" }, { hora: "asc" }]
+    const agendamentoAtualizado = await prisma.agendamento.update({
+      where: { id: parseInt(id) }, 
+      data: { status: status },   
     });
-
-    res.json(agendamentos);
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao listar agendamentos do mês" });
+    res.status(200).json(agendamentoAtualizado); // Retorna o agendamento atualizado
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    res.status(500).json({ error: 'Erro ao atualizar status do agendamento.' });
   }
 };
 
-// Cancelar agendamento
-export const cancelarAgendamento = async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    const agendamento = await prisma.agendamento.update({
-      where: { id: parseInt(id) },
-      data: { status: "cancelado" }
-    });
-
-    res.json({ mensagem: "Agendamento cancelado", agendamento });
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao cancelar agendamento" });
-  }
-};
-
-// Concluir agendamento
-export const concluirAgendamento = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const agendamento = await prisma.agendamento.update({
-      where: { id: parseInt(id) },
-      data: { status: "concluido" }
-    });
-
-    res.json({ mensagem: "Agendamento concluído", agendamento });
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao concluir agendamento" });
-  }
+module.exports = {
+  login,
+  getAllAgendamentos,
+  getAgendamentosDia,
+  updateAgendamentoStatus // <-- ADICIONADO AQUI
 };

@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Barbearia Prates</title>
-  <!-- Linkando nosso arquivo de estilo CSS -->
-  <link rel="stylesheet" href="../public/css/style.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Essa é a barra amarela que fica lá em cima -->
   <header class="top-bar">
     <div class="logo">
-      <img src="logobarra.png" alt="Barbearia Prates Logo">
+      <img src="/img/logobarra.png" alt="Barbearia Prates Logo">
     </div>
-    <!-- Menu de navegação -->
     <nav>
       <a href="#inicio">Início</a>
       <a href="#servicos">Serviços</a>
@@ -22,7 +20,7 @@
     <button id="abrirAgendamento" class="btn-agendar">Agendar horário</button>
   </header>
 
-  <!-- Seção de início, a primeira coisa que a gente vê -->
+  
   <section id="inicio" class="hero">
     <h1>ESTILO É UM REFLEXO DA SUA ATITUDE E<br>SUA PERSONALIDADE</h1>
     <p>Horário de funcionamento: 08:00 às 19:00</p>
@@ -30,29 +28,24 @@
     <p class="whatsapp-info">Para cancelamento entrar em contato pelo whatsapp: (77) 99959-2778</p>
   </section>
 
-  <!-- Seção com os cards dos serviços -->
   <section id="servicos" class="servicos">
     <h2>Serviços</h2>
     <p class="servicos-descricao">Cortes de todos os estilos — do clássico ao moderno.<br>Aqui, sua barba e sobrancelha ganham o cuidado que merecem.<br>Estilo e elegância em cada detalhe.</p>
     <div class="servicos-container">
-      <!-- Cada 'div' dessa é um card. O 'data-servico' a gente usa no JS pra saber qual foi clicado -->
-      <div class="card" data-servico="Corte"><img src="corte de cabelo.jpg" alt="Corte de cabelo"><div class="card-info"><span>Corte de cabelo</span><span class="preco">R$ 25,00</span></div></div>
-      <div class="card" data-servico="Barba"><img src="barba.jpg" alt="Barba"><div class="card-info"><span>Barba</span><span class="preco">R$ 15,00</span></div></div>
-      <div class="card" data-servico="Sobrancelha"><img src="sombrancelha.jpg" alt="Sobrancelha"><div class="card-info"><span>Sobrancelha</span><span class="preco">R$ 10,00</span></div></div>
-      <div class="card" data-servico="Corte e Barba"><img src="corte e barba.jpg" alt="Corte e Barba"><div class="card-info"><span>Corte e barba</span><span class="preco">R$ 40,00</span></div></div>
+      <div class="card" data-servico="Corte"><img src="/img/corte de cabelo.jpg" alt="Corte de cabelo"><div class="card-info"><span>Corte de cabelo</span><span class="preco">R$ 25,00</span></div></div>
+      <div class="card" data-servico="Barba"><img src="/img/barba.jpg" alt="Barba"><div class="card-info"><span>Barba</span><span class="preco">R$ 15,00</span></div></div>
+      <div class="card" data-servico="Sobrancelha"><img src="/img/sombrancelha.jpg" alt="Sobrancelha"><div class="card-info"><span>Sobrancelha</span><span class="preco">R$ 10,00</span></div></div>
+      <div class="card" data-servico="Corte e Barba"><img src="/img/corte e barba.jpg" alt="Corte e Barba"><div class="card-info"><span>Corte e barba</span><span class="preco">R$ 40,00</span></div></div>
     </div>
   </section>
 
-  <!-- Seção do mapa -->
   <section id="localizacao" class="localizacao">
     <h2>Localização</h2>
-    <div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.683781656229!2d-41.136213125518734!3d-14.615198685878845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x741d2b2d0a2e7c3%3A0x8e6f1b1d6b8c7d9!2sR.%205%20de%20Abril%2C%2019%20-%20Anag%C3%A9%2C%20BA%2C%2045180-000!5e0!3m2!1spt-BR!2sbr!4v1700078972588!5m2!1spt-BR!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    <div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!m12!1m3!1d3951.683781656229!2d-41.136213125518734!3d-14.615198685878845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x741d2b2d0a2e7c3%3A0x8e6f1b1d6b8c7d9!2sR.%205%20de%20Abril%2C%2019%20-%20Anag%C3%A9%2C%20BA%2C%2045180-000!5e0!3m2!1spt-BR!2sbr!4v1700078972588!5m2!1spt-BR!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
     <p class="endereco-texto">Rua 5 de Abril, 19 - Anagé (Ao lado do Posto Bomfim & Bomfim)</p>
   </section>
 
-  <!-- Essa é a área do pop-up de agendamento (começa escondida) -->
   <div id="areaAgendamento" class="area-agendamento">
-    <!-- A caixa amarela do formulário -->
     <div class="form-box" id="formBox">
       <button id="btnFechar" class="btn-fechar">✖</button>
       <h2>Agendar horário</h2>
@@ -60,7 +53,6 @@
         <label for="nome">Nome completo</label><input type="text" id="nome" placeholder="Digite seu nome" required>
         <label for="telefone">Telefone</label><input type="tel" id="telefone" placeholder="Ex: (77) 99999-9999" required>
         <label for="servico">Selecione o serviço</label>
-        <!-- Tive que adicionar "Sobrancelha" aqui pra bater com os cards lá de cima -->
         <select id="servico" required>
           <option>Corte e Barba</option>
           <option>Corte</option>
@@ -75,36 +67,32 @@
         <button type="submit" id="btnAgendar">Agendar horário</button>
       </form>
     </div>
-    <!-- A tela preta que aparece depois que a gente agenda -->
     <div class="success-box" id="successBox">
-      <img src="logobarra2.png" alt="Logo Barbearia Prates" class="success-logo">
+      <img src="/img/logobarra2.png" alt="Logo Barbearia Prates" class="success-logo">
       <p>Agendamento realizado<br>com sucesso!</p>
       <button id="voltarBtn">Voltar</button>
     </div>
   </div>
 
-  <!-- Botão de voltar pro topo que o JS vai fazer aparecer -->
   <button id="backToTopBtn" class="back-to-top-btn" title="Voltar ao topo">▲</button>
 
-  <!-- Linkando nosso arquivo JavaScript no final pra página carregar mais rápido -->
-  <script src="../public/js/main.js"></script>
+  
+  <script src="/js/main.js"></script>
 
-  <!-- Rodapé do site -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-about"><p>Este site foi desenvolvido como parte de um projeto escolar, com o objetivo de aplicar conhecimentos de design e programação.</p></div>
       <div class="footer-brand">
-        <img src="logobarra.png" alt="Barbearia Prates" class="footer-logo">
+        <img src="/img/logobarra.png" alt="Barbearia Prates" class="footer-logo">
         <div class="social-icons">
-          <a href="https://www.instagram.com/seu-usuario" target="_blank"><img src="InstagramLogo.png" alt="Instagram"></a>
-          <a href="https://wa.me/5577999592778?text=Ol%C3%A1%2C%20gostaria%20de%20cancelar%20meu%20servi%C3%A7o." target="_blank"><img src="ZapLogo.png" alt="WhatsApp"></a>
+          <a href="https://www.instagram.com/seu-usuario" target="_blank"><img src="/img/InstagramLogo.png" alt="Instagram"></a>
+          <a href="https://wa.me/5577999592778?text=Ol%C3%A1%2C%20gostaria%20de%20cancelar%20meu%20servi%C3%A7o." target="_blank"><img src="/img/ZapLogo.png" alt="WhatsApp"></a>
         </div>
       </div>
     </div>
     <div class="footer-copyright">
       <p>© 2025 Barbearia Prates. Site desenvolvido como projeto escolar.</p>
-      <!-- Link discreto pro painel do barbeiro -->
-      <a href="login.html" class="admin-link">Acesso Restrito</a>
+      <a href="/login.html" class="admin-link">Acesso Restrito</a>
     </div>
   </footer>
 </body>

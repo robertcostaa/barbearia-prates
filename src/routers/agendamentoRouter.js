@@ -1,13 +1,9 @@
-import express from "express";
-import {
-  listarAgendamentos,
-  criarAgendamento,
-} from "../controllers/agendamentoController.js";
-
+// Usa o "require" em vez de "import"
+const express = require('express');
 const router = express.Router();
 
-// Rotas públicas
-router.get("/", listarAgendamentos);
-router.post("/", criarAgendamento);
+const agendamentoController = require('../controllers/agendamentoController.js');
 
-export default router;
+router.post('/', agendamentoController.createAgendamento);
+
+module.exports = router;

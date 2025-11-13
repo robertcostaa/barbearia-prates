@@ -8,17 +8,18 @@ datasource db {
 }
 
 model Agendamento {
-  id       Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   nomeCliente String
-  telefone String
-  servico  String
-  data     DateTime
-  hora     String
-  status   String   @default("pendente")
+  telefone    String
+  servico     String
+  data        DateTime
+  hora        String
+  status      String   @default("agendado") // Mudei para "agendado"
 }
 
 model Barbeiro {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
+  id    Int    @id @default(autoincrement())
+  nome  String // CAMPO ADICIONADO
+  email String @unique // CORRIGIDO DE 'username' PARA 'email'
+  senha String // CORRIGIDO DE 'password' PARA 'senha'
 }

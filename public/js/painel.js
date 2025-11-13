@@ -3,46 +3,36 @@ document.addEventListener('DOMContentLoaded', async function() {
     const usernameDisplay = document.getElementById('username-display');
     const filtroSelect = document.getElementById('filtro');
 
-    // --- VERIFICAÇÃO DE SEGURANÇA ---
     const token = localStorage.getItem('authToken');
     const usuarioLogado = localStorage.getItem('barbeiroLogado');
 
     if (!token || !usuarioLogado) {
-        // Se não houver token ou nome, o usuário não está logado.
-        // Limpa qualquer lixo e redireciona para o login.
         localStorage.removeItem('authToken');
         localStorage.removeItem('barbeiroLogado');
         window.location.href = 'login.html';
-        return; // Para a execução do script
+        return;
     }
 
-    // Se chegou aqui, o usuário está logado. Mostra o nome.
     usernameDisplay.textContent = `Olá, ${usuarioLogado}!`;
-
-    // --- FUNÇÕES DE API ---
 
     // Função para buscar agendamentos no backend
     async function carregarAgendamentos() {
-        // Define qual rota usar com base no filtro selecionado
+        
         const filtro = filtroSelect.value;
-        let url = '/barbeiro/'; // Rota padrão para "todos"
+        
+        
+        let url = '/barbeiro/agendamentos/todos'; // Rota padrão CORRETA para "todos" e "semana"
 
         if (filtro === 'hoje') {
             url = '/barbeiro/agendamentos/dia';
         }
-        // Nota: a rota para "semana" não existe no backend que você mostrou.
-        // Se o usuário selecionar "semana", ele vai buscar "todos" por enquanto.
 
         try {
-            const response = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${token}` // Envia o token para autenticação
-                }
-            });
+            
+            const response = await fetch(url); 
 
             if (!response.ok) {
                 if(response.status === 401 || response.status === 403) {
-                     // Token inválido ou expirado
                      localStorage.removeItem('authToken');
                      localStorage.removeItem('barbeiroLogado');
                      window.location.href = 'login.html';
@@ -68,49 +58,52 @@ document.addEventListener('DOMContentLoaded', async function() {
         listaAgendamentos.innerHTML = '';
         agendamentos.forEach(agendamento => {
             const card = document.createElement('div');
-            card.className = 'agendamento-card-admin';
+            // Adiciona a classe 'concluido' ou 'cancelado' se o status for diferente de 'agendado'
+            card.className = `agendamento-card-admin ${agendamento.status !== 'agendado' ? agendamento.status : ''}`;
             
-            // Formatando a data para o padrão brasileiro
             const dataObj = new Date(agendamento.data);
             const dataFormatada = dataObj.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
+            // --- CORREÇÃO DOS NOMES DOS CAMPOS ---
             card.innerHTML = `
                 <div class="card-info-header">
-                    <p><strong>Nome:</strong> ${agendamento.nome}</p>
+                    <p><strong>Nome:</strong> ${agendamento.nomeCliente}</p> <!-- CORRIGIDO para nomeCliente -->
                     <p><strong>Data:</strong> ${dataFormatada}</p>
                 </div>
                 <div class="card-info-body">
                     <p><strong>Telefone:</strong> ${agendamento.telefone}</p>
-                    <p><strong>Horário:</strong> ${agendamento.horario}</p>
+                    <p><strong>Horário:</strong> ${agendamento.hora}</p> <!-- CORRIGIDO para hora -->
                 </div>
                 <p class="card-info-service"><strong>Serviço:</strong> ${agendamento.servico}</p>
+                <div class="card-info-status"><strong>Status:</strong> <span class="status-${agendamento.status}">${agendamento.status}</span></div>
                 <div class="card-actions">
                     <button class="btn-cancelar" data-id="${agendamento.id}">Cancelar</button>
-                    <button class="btn-concluir" data-id="${agendamento.id}">Concluído</button>
+                    <button class="btn-concluir" data-id="${agendamento.id}">Concluir</button>
                 </div>
             `;
             listaAgendamentos.appendChild(card);
         });
     }
 
-    // Função para atualizar o status de um agendamento (cancelar/concluir)
-    async function atualizarAgendamento(id, acao) {
-        const url = `/barbeiro/${acao}/${id}`; // Ex: /barbeiro/cancelar/123
+    // Função para atualizar o status de um agendamento
+    async function atualizarAgendamento(id, novoStatus) {
+        // A rota agora é a mesma para qualquer atualização de status
+        const url = `/barbeiro/agendamentos/${id}`;
 
         try {
             const response = await fetch(url, {
-                method: 'PATCH',
+                method: 'PATCH', // Usamos PATCH para atualizações parciais
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: novoStatus }) // Enviamos o novo status no corpo
             });
 
             if (!response.ok) {
-                throw new Error(`Falha ao ${acao} o agendamento.`);
+                throw new Error(`Falha ao atualizar o agendamento.`);
             }
-
-            // Se a atualização deu certo, recarrega a lista da tela
-            carregarAgendamentos();
+            
+            carregarAgendamentos(); // Recarrega a lista para mostrar a mudança
 
         } catch (error) {
             alert(error.message);
@@ -118,8 +111,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // --- EVENT LISTENERS ---
-
-    // Escuta cliques nos botões de ação
     listaAgendamentos.addEventListener('click', function(event) {
         const target = event.target;
         const agendamentoId = target.getAttribute('data-id');
@@ -127,20 +118,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!agendamentoId) return;
 
         if (target.matches('.btn-cancelar')) {
-            if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
-                atualizarAgendamento(agendamentoId, 'cancelar');
+            if (confirm('Tem certeza que deseja CANCELAR este agendamento?')) {
+                atualizarAgendamento(agendamentoId, 'cancelado');
             }
         } else if (target.matches('.btn-concluir')) {
-             if (confirm('Marcar este agendamento como concluído?')) {
-                atualizarAgendamento(agendamentoId, 'concluir');
+             if (confirm('Marcar este agendamento como CONCLUÍDO?')) {
+                atualizarAgendamento(agendamentoId, 'concluido');
             }
         }
     });
 
-    // Escuta mudanças no filtro
     filtroSelect.addEventListener('change', carregarAgendamentos);
-
-    // --- INICIALIZAÇÃO ---
-    // Carrega os agendamentos assim que a página é aberta
-    carregarAgendamentos();
+    carregarAgendamentos(); // Carrega os agendamentos ao abrir a página
 });

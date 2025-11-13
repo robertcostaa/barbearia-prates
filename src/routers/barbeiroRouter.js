@@ -1,24 +1,20 @@
-import express from "express";
-import { 
-  loginBarbeiro, 
-  listarAgendamentosDia, 
-  listarAgendamentosMes, 
-  cancelarAgendamento, 
-  concluirAgendamento 
-} from "../controllers/barbeiroController.js";
-
-import {
-  listarAgendamentos
-} from "../controllers/agendamentoController.js"
-
+const express = require('express');
 const router = express.Router();
 
-// Rotas do barbeiro
-router.post("/login", loginBarbeiro);
-router.get("/", listarAgendamentos);
-router.get("/agendamentos/dia", listarAgendamentosDia);
-router.get("/agendamentos/mes", listarAgendamentosMes);
-router.patch("/cancelar/:id", cancelarAgendamento);
-router.patch("/concluir/:id", concluirAgendamento);
 
-export default router;
+const barbeiroController = require('../controllers/barbeiroController.js');
+
+
+router.post('/login', barbeiroController.login);
+
+
+router.get('/agendamentos/todos', barbeiroController.getAllAgendamentos);
+
+
+router.get('/agendamentos/dia', barbeiroController.getAgendamentosDia);
+
+
+router.patch('/agendamentos/:id', barbeiroController.updateAgendamentoStatus);
+
+
+module.exports = router;
