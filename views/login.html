@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Painel Barbearia</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+<body class="admin-body">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="logobarra2.png" alt="Logo Barbearia Prates">
+                <h2>Acesso Restrito</h2>
+                <p>Entre com suas credenciais para gerenciar os agendamentos.</p>
+            </div>
+            <form class="login-form">
+                <div class="input-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required>
+                </div>
+                <!-- BOTÃO ATUALIZADO: Agora é um botão de verdade para o JS funcionar -->
+                <button type="submit" class="btn-login">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT ADICIONADO: Link para o novo arquivo JS do login -->
+    <script src="../public/js/login.js"></script>
+</body>
+</html>
